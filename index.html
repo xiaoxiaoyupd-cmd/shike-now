@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#F6EFE6">
+  <title>食刻NOW</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ============================================
+       页面1: 启动 / 身份选择
+       ============================================ -->
+  <div class="page splash-page active" id="page-splash">
+    <div class="splash-logo">🍳</div>
+    <div class="splash-title">食刻NOW</div>
+    <div class="splash-subtitle">用家里的食材，做今天的饭 ✨</div>
+
+    <div class="identity-cards">
+      <div class="identity-card" id="identity-college" onclick="selectIdentity('college')">
+        <div class="id-icon">🎓</div>
+        <div class="id-info">
+          <div class="id-name">大学生</div>
+          <div class="id-desc">宿舍小灶 · 便宜快手 · 一锅搞定</div>
+        </div>
+      </div>
+      <div class="identity-card" id="identity-solo" onclick="selectIdentity('solo')">
+        <div class="id-icon">🏠</div>
+        <div class="id-info">
+          <div class="id-name">独居青年</div>
+          <div class="id-desc">一人食量 · 拒绝浪费 · 简单美味</div>
+        </div>
+      </div>
+      <div class="identity-card" id="identity-fitness" onclick="selectIdentity('fitness')">
+        <div class="id-icon">💪</div>
+        <div class="id-info">
+          <div class="id-name">健身减脂</div>
+          <div class="id-desc">高蛋白低卡 · 营养均衡 · 好吃不胖</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg" onclick="confirmIdentity()" style="margin-top:16px;font-size:1.1rem;padding:14px 44px;">
+      开始做饭吧 ✨
+    </button>
+  </div>
+
+  <!-- ============================================
+       页面2: 首页（完整版）
+       ============================================ -->
+  <div class="page" id="page-home">
+
+    <!-- 顶部导航栏 -->
+    <div class="top-bar">
+      <div class="logo-text">食刻NOW ✨</div>
+      <div class="coin-capsule">
+        🎫 <span id="top-coin">230</span>
+        <span class="coin-plus" onclick="showToast('金币中心')">+</span>
+      </div>
+      <div class="avatar-circle" onclick="navigateTo('profile')">
+        👧
+        <div class="avatar-dot"></div>
+      </div>
+    </div>
+
+    <!-- Banner 卡片 -->
+    <div class="banner-card">
+      <div class="banner-left">
+        <h2>食刻NOW——<br>个性化美食生成</h2>
+      </div>
+      <div class="banner-right">🐱👨‍🍳</div>
+    </div>
+
+    <!-- 当前原材料 -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="section-label">🥬 当前原材料（添加或选择）</div>
+      <div class="ingredient-grid" id="ingredient-grid"></div>
+      <div class="custom-ing-row">
+        <input type="text" id="custom-ing-input" placeholder="输入其他食材..."
+               onkeydown="if(event.key==='Enter')addCustomIngredient()">
+        <button class="btn btn-primary btn-sm" onclick="addCustomIngredient()" style="font-size:0.8rem;padding:10px 16px;">+ 添加</button>
+      </div>
+      <div id="custom-ings" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+    </div>
+
+    <!-- 餐品数量/重量 -->
+    <div class="slider-group">
+      <div class="section-label">🍽️ 餐品数量/重量</div>
+      <div class="slider-track" id="qty-slider-track"
+           onmousedown="startSliderDrag(event,'qty')"
+           ontouchstart="startSliderDrag(event,'qty')">
+        <div class="slider-fill" id="qty-fill" style="width:33%;"></div>
+        <div class="slider-thumb" id="qty-thumb" style="left:33%;">🐾</div>
+      </div>
+      <div class="slider-labels">
+        <span>1人份</span><span>2-3人份</span><span>家庭份</span>
+      </div>
+    </div>
+
+    <!-- 烹饪方式 -->
+    <div style="margin-top:14px;">
+      <div class="section-label">🍳 烹饪方式</div>
+      <div class="btn-row" id="method-btns"></div>
+    </div>
+
+    <!-- 风味类型 -->
+    <div style="margin-top:14px;">
+      <div class="section-label">🌶️ 风味类型</div>
+      <div class="ribbon-tags" id="taste-tags"></div>
+    </div>
+
+    <!-- 制作难度 -->
+    <div style="margin-top:14px;">
+      <div class="section-label">🐱 制作难度</div>
+      <div class="cat-cards" id="difficulty-cards"></div>
+    </div>
+
+    <!-- 制作时间 -->
+    <div class="slider-group">
+      <div class="section-label">⏰ 制作时间</div>
+      <div class="slider-track" id="time-slider-track"
+           onmousedown="startSliderDrag(event,'time')"
+           ontouchstart="startSliderDrag(event,'time')">
+        <div class="slider-fill" id="time-fill" style="width:33%;"></div>
+        <div class="slider-thumb" id="time-thumb" style="left:33%;">⏰</div>
+      </div>
+      <div class="slider-labels">
+        <span>15 min</span><span>30 min</span><span>45 min+</span>
+      </div>
+    </div>
+
+    <!-- 生成按钮 -->
+    <div class="generate-section">
+      <button class="btn-generate" onclick="generateRecipes()">
+        🪄 生成菜谱
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       页面3: 菜谱结果列表
+       ============================================ -->
+  <div class="page" id="page-recipes">
+    <div class="page-header">
+      <h2>📖 为你推荐</h2>
+      <div class="subtitle">点击卡片查看详细做法</div>
+    </div>
+    <div class="recipe-list" id="recipe-list"></div>
+  </div>
+
+  <!-- ============================================
+       页面4: 菜谱详情
+       ============================================ -->
+  <div class="page" id="page-recipe-detail">
+    <button class="btn btn-back" onclick="navigateTo('recipes')">← 返回</button>
+    <div class="recipe-hero" id="detail-hero">🍽️</div>
+    <div class="recipe-detail-name" id="detail-name"></div>
+    <div class="recipe-detail-meta">
+      <div class="meta-badge">⏱ <span id="detail-time"></span></div>
+      <div class="meta-badge">📊 <span id="detail-difficulty"></span></div>
+      <div class="meta-badge">🔥 <span id="detail-calories"></span></div>
+    </div>
+    <div class="section-label">🛒 所需食材</div>
+    <div class="ingredient-list" id="detail-ingredients"></div>
+    <div class="section-label">📝 制作步骤</div>
+    <div class="step-list" id="detail-steps"></div>
+    <div class="nutrition-card">
+      <div class="nutrition-item"><div class="nut-value" id="detail-protein">-</div><div class="nut-label">蛋白质</div></div>
+      <div class="nutrition-item"><div class="nut-value" id="detail-carbs">-</div><div class="nut-label">碳水</div></div>
+      <div class="nutrition-item"><div class="nut-value" id="detail-fat">-</div><div class="nut-label">脂肪</div></div>
+    </div>
+    <div style="text-align:center;margin:20px 0;">
+      <button class="btn btn-primary" onclick="showToast('已收藏 ⭐')">⭐ 收藏菜谱</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       页面5: 个人中心
+       ============================================ -->
+  <div class="page" id="page-profile">
+    <div class="page-header"><h2>🏠 我的厨房</h2></div>
+    <div class="profile-header-card">
+      <div class="profile-avatar"><span id="profile-avatar-icon">🎓</span></div>
+      <div class="profile-name" id="profile-name">干饭大学生</div>
+      <div class="profile-badge" id="profile-identity">大学生</div>
+      <div class="coin-row">🪙 <span id="coin-count">128</span> 金币</div>
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-num" id="fav-count">0</div><div class="stat-label">收藏</div></div>
+        <div class="stat-item"><div class="stat-num" id="share-count">0</div><div class="stat-label">分享</div></div>
+        <div class="stat-item"><div class="stat-num">🔥</div><div class="stat-label">连续天数</div></div>
+      </div>
+    </div>
+    <div class="menu-list">
+      <div class="menu-item" onclick="showToast('社区即将上线~ 🚧')"><span class="mi-icon">🌐</span>美食社区<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">❤️</span>我的收藏<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">📜</span>烹饪历史<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">⚙️</span>设置<span class="mi-arrow">›</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       底部导航（毛玻璃 5 Tab）
+       ============================================ -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-page="home">
+      <span class="nav-icon">🏠</span><span>首页</span>
+    </button>
+    <button class="nav-item" data-page="discover">
+      <span class="nav-icon">🧭</span><span>发现</span>
+    </button>
+    <div class="nav-center" data-page="create">
+      <div class="nav-paw" onclick="navigateTo('home');showToast('发布美食~ 📸')">🐾</div>
+      <div class="nav-label">发布</div>
+    </div>
+    <button class="nav-item" data-page="favorites">
+      <span class="nav-icon">⭐</span><span>收藏</span>
+    </button>
+    <button class="nav-item" data-page="profile">
+      <span class="nav-icon">👤</span><span>我的</span>
+    </button>
+  </nav>
+
+  <!-- ============================================
+       为你推荐 弹窗
+       ============================================ -->
+  <div class="modal-overlay" id="recommend-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-decor">✨</span>
+        <span class="modal-title" id="modal-title">为你推荐</span>
+        <span class="modal-decor">✨</span>
+      </div>
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+      <div class="modal-recipe-grid" id="modal-recipes"></div>
+      <button class="btn btn-primary btn-lg modal-btn" onclick="closeRecommendModal()">
+        开始自己搭配 🍳
+      </button>
+    </div>
+  </div>
+
+</div><!-- .app-container -->
+
+<script src="js/mock-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
