@@ -930,6 +930,7 @@ body {
 }
 
 .modal-card {
+  position: relative;
   width: 100%;
   max-width: 380px;
   max-height: 85vh;
@@ -945,6 +946,31 @@ body {
   box-shadow: var(--shadow-float);
   animation: bounceIn 0.4s ease;
   text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--stroke);
+  background: var(--white);
+  color: var(--brown-dark);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.15s;
+}
+.modal-close:active {
+  background: #FFE0E0;
+  color: #E8553D;
+  transform: scale(0.9);
 }
 
 .modal-header {
