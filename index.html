@@ -44,6 +44,20 @@
           <div class="id-desc">高蛋白低卡 · 营养均衡 · 好吃不胖</div>
         </div>
       </div>
+      <div class="identity-card" id="identity-prochef" onclick="selectIdentity('prochef')">
+        <div class="id-icon">👨‍🍳</div>
+        <div class="id-info">
+          <div class="id-name">专业厨师</div>
+          <div class="id-desc">进阶学习 · 米其林灵感 · 技法提升</div>
+        </div>
+      </div>
+      <div class="identity-card" id="identity-headchef" onclick="selectIdentity('headchef')">
+        <div class="id-icon">🧑‍🍳</div>
+        <div class="id-info">
+          <div class="id-name">主厨</div>
+          <div class="id-desc">分享交流 · 灵感碰撞 · 美食社区</div>
+        </div>
+      </div>
     </div>
 
     <button class="btn btn-primary btn-lg" onclick="confirmIdentity()" style="margin-top:16px;font-size:1.1rem;padding:14px 44px;">
@@ -72,9 +86,9 @@
     <!-- Banner 卡片 -->
     <div class="banner-card">
       <div class="banner-left">
-        <h2>食刻NOW——<br>个性化美食生成</h2>
+        <h2 id="banner-title">食刻NOW——<br>个性化美食生成</h2>
       </div>
-      <div class="banner-right">🐱👨‍🍳</div>
+      <div class="banner-right" id="banner-emoji">🐱👨‍🍳</div>
     </div>
 
     <!-- 当前原材料 -->
@@ -355,6 +369,20 @@
           <div class="id-info">
             <div class="id-name">健身减脂</div>
             <div class="id-desc">高蛋白低卡 · 好吃不胖</div>
+          </div>
+        </div>
+        <div class="identity-card" id="set-prochef" onclick="switchIdentity('prochef')">
+          <div class="id-icon">👨‍🍳</div>
+          <div class="id-info">
+            <div class="id-name">专业厨师</div>
+            <div class="id-desc">进阶学习 · 米其林灵感</div>
+          </div>
+        </div>
+        <div class="identity-card" id="set-headchef" onclick="switchIdentity('headchef')">
+          <div class="id-icon">🧑‍🍳</div>
+          <div class="id-info">
+            <div class="id-name">主厨</div>
+            <div class="id-desc">分享交流 · 美食社区</div>
           </div>
         </div>
       </div>

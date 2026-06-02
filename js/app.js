@@ -188,7 +188,26 @@ function selectIdentity(identity) {
 function confirmIdentity() {
   if (!AppState.userIdentity) { showToast('请先选择一个身份吧~ ⭐'); return; }
   saveData('identity', AppState.userIdentity);
-  showRecommendModal();
+  updateBannerForIdentity();
+  if (AppState.userIdentity === 'headchef') {
+    // 主厨直接进社区
+    navigateTo('discover');
+  } else {
+    showRecommendModal();
+  }
+}
+
+function updateBannerForIdentity() {
+  const bannerConfigs = {
+    college:  { title: '食刻NOW——<br>个性化美食生成', emoji: '🐱👨‍🍳' },
+    solo:     { title: '食刻NOW——<br>一人食也精彩', emoji: '🍳' },
+    fitness:  { title: '食刻NOW——<br>吃出好身材', emoji: '💪' },
+    prochef:  { title: '食刻NOW——<br>米其林灵感进修', emoji: '👨‍🍳' },
+    headchef: { title: '食刻NOW——<br>分享你的招牌菜', emoji: '🧑‍🍳' }
+  };
+  const config = bannerConfigs[AppState.userIdentity] || bannerConfigs.college;
+  document.getElementById('banner-title').innerHTML = config.title;
+  document.getElementById('banner-emoji').textContent = config.emoji;
 }
 
 // ============================================
@@ -197,21 +216,27 @@ function confirmIdentity() {
 
 // 每个身份推荐6道菜
 const IDENTITY_RECIPES = {
-  college: [1, 4, 8, 9, 12, 15],   // 大学生：番茄炒蛋、酸辣土豆丝、麻婆豆腐、蛋炒饭、可乐鸡翅、懒人焖饭
-  solo:    [1, 2, 5, 9, 11, 14],   // 独居：番茄炒蛋、蒜蓉西兰花、照烧鸡腿、蛋炒饭、凉拌黄瓜、味噌汤
-  fitness:[2, 6, 8, 11, 5, 14]     // 健身：蒜蓉西兰花、清蒸鲈鱼、麻婆豆腐、凉拌黄瓜、照烧鸡腿、味噌汤
+  college:  [1, 4, 8, 9, 12, 15],  // 大学生：番茄炒蛋、酸辣土豆丝、麻婆豆腐、蛋炒饭、可乐鸡翅、懒人焖饭
+  solo:     [1, 2, 5, 9, 11, 14],  // 独居：番茄炒蛋、蒜蓉西兰花、照烧鸡腿、蛋炒饭、凉拌黄瓜、味噌汤
+  fitness:  [2, 6, 8, 11, 5, 14],  // 健身：蒜蓉西兰花、清蒸鲈鱼、麻婆豆腐、凉拌黄瓜、照烧鸡腿、味噌汤
+  prochef:  [3, 5, 7, 10, 16, 17], // 专业厨师：红烧肉、照烧鸡腿、天妇罗炸虾、糖醋里脊、香煎牛排、法式红酒炖鸡
+  headchef: [7, 3, 10, 13, 18, 19] // 主厨：天妇罗、红烧肉、糖醋里脊、地三鲜、惠灵顿牛排、海鲜意面
 };
 
 const IDENTITY_LABELS = {
   college: '大学生',
   solo: '独居青年',
-  fitness: '健身减脂'
+  fitness: '健身减脂',
+  prochef: '专业厨师',
+  headchef: '主厨'
 };
 
 const IDENTITY_DESC = {
   college: '便宜快手 · 一锅搞定',
   solo: '一人食量 · 拒绝浪费',
-  fitness: '高蛋白低卡 · 好吃不胖'
+  fitness: '高蛋白低卡 · 好吃不胖',
+  prochef: '进阶学习 · 米其林灵感',
+  headchef: '分享交流 · 美食社区'
 };
 
 function showRecommendModal() {
@@ -473,9 +498,9 @@ function openRecipeDetail(id) {
 // 个人中心
 // ============================================
 function updateProfilePage() {
-  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人' };
-  const icons = { college: '🎓', solo: '🏠', fitness: '💪' };
-  const labels = { college: '大学生', solo: '独居青年', fitness: '健身减脂' };
+  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人', prochef: '进阶小厨神', headchef: '食刻主厨' };
+  const icons = { college: '🎓', solo: '🏠', fitness: '💪', prochef: '👨‍🍳', headchef: '🧑‍🍳' };
+  const labels = { college: '大学生', solo: '独居青年', fitness: '健身减脂', prochef: '专业厨师', headchef: '主厨' };
   const cur = AppState.userIdentity || 'college';
   document.getElementById('profile-avatar-icon').textContent = icons[cur];
   const displayName = AppState.nickname || names[cur];
@@ -699,8 +724,8 @@ function publishPost() {
   if (!title) { showToast('请输入标题哦~ ✨'); return; }
   if (!desc) { showToast('请输入描述哦~ 📝'); return; }
 
-  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人' };
-  const icons = { college: '🎓', solo: '🏠', fitness: '💪' };
+  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人', prochef: '进阶小厨神', headchef: '食刻主厨' };
+  const icons = { college: '🎓', solo: '🏠', fitness: '💪', prochef: '👨‍🍳', headchef: '🧑‍🍳' };
   const cur = AppState.userIdentity || 'college';
 
   const post = {
@@ -927,9 +952,9 @@ let tempAvatar = null;
 let tempNickname = null;
 
 function renderSettingsPage() {
-  const icons = { college: '🎓', solo: '🏠', fitness: '💪' };
-  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人' };
-  const labels = { college: '大学生', solo: '独居青年', fitness: '健身减脂' };
+  const icons = { college: '🎓', solo: '🏠', fitness: '💪', prochef: '👨‍🍳', headchef: '🧑‍🍳' };
+  const names = { college: '干饭大学生', solo: '独居小当家', fitness: '健身餐达人', prochef: '进阶小厨神', headchef: '食刻主厨' };
+  const labels = { college: '大学生', solo: '独居青年', fitness: '健身减脂', prochef: '专业厨师', headchef: '主厨' };
   const cur = AppState.userIdentity || 'college';
   const savedAvatar = loadData('avatar', icons[cur]);
   document.getElementById('setting-avatar').textContent = savedAvatar;
@@ -999,6 +1024,7 @@ function closeNicknameModal() {
 function switchIdentity(identity) {
   AppState.userIdentity = identity;
   saveData('identity', identity);
+  updateBannerForIdentity();
   updateProfilePage();
   renderSettingsPage();
   showToast('身份已切换 ✨');
@@ -1064,6 +1090,7 @@ function init() {
 
   // 如果已有身份，直接进首页；否则显示启动页
   if (AppState.userIdentity) {
+    updateBannerForIdentity();
     navigateTo('home');
   } else {
     navigateTo('splash');
