@@ -89,14 +89,21 @@ function isFavorited(recipeId) {
 }
 
 function markAsCooked(recipeId) {
-  if (isCooked(recipeId)) return; // 已制作过不重复添加
-  AppState.history.unshift({
-    recipeId: recipeId,
-    timestamp: Date.now()
-  });
-  saveData('history', AppState.history);
-  updateFavCookedBtns();
-  showToast('太棒了！已加入烹饪历史 🎉');
+  if (isCooked(recipeId)) {
+    // 已制作过 → 取消
+    AppState.history = AppState.history.filter(h => h.recipeId !== recipeId);
+    saveData('history', AppState.history);
+    updateFavCookedBtns();
+    showToast('已取消记录');
+  } else {
+    AppState.history.unshift({
+      recipeId: recipeId,
+      timestamp: Date.now()
+    });
+    saveData('history', AppState.history);
+    updateFavCookedBtns();
+    showToast('太棒了！已加入烹饪历史 🎉');
+  }
 }
 
 function isCooked(recipeId) {
