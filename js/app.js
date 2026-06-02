@@ -1054,10 +1054,34 @@ function clearAllData() {
 
 function logout() {
   if (confirm('确定要退出登录吗？\n\n你的收藏、历史和帖子数据会保留在本机。')) {
+    // 记住当前身份，以便返回时恢复
+    saveData('prevIdentity', AppState.userIdentity);
     AppState.userIdentity = null;
     saveData('identity', null);
     navigateTo('splash');
     updateNavBar('splash');
+    // 显示返回按钮
+    const backBtn = document.getElementById('splash-back-btn');
+    if (backBtn) backBtn.style.display = '';
+  }
+}
+
+function goBackFromSplash() {
+  const prevIdentity = loadData('prevIdentity', null);
+  if (prevIdentity) {
+    AppState.userIdentity = prevIdentity;
+    saveData('identity', prevIdentity);
+    saveData('prevIdentity', null);
+    updateBannerForIdentity();
+    updateProfilePage();
+    navigateTo('home');
+  } else {
+    // 无历史身份，用默认身份进首页
+    AppState.userIdentity = 'college';
+    saveData('identity', 'college');
+    updateBannerForIdentity();
+    updateProfilePage();
+    navigateTo('home');
   }
 }
 
@@ -1093,6 +1117,10 @@ function init() {
     updateBannerForIdentity();
     navigateTo('home');
   } else {
+    // 如果之前有过身份（如退出登录），显示返回按钮
+    const prevIdentity = loadData('prevIdentity', null);
+    const backBtn = document.getElementById('splash-back-btn');
+    if (backBtn) backBtn.style.display = prevIdentity ? '' : 'none';
     navigateTo('splash');
   }
 }
