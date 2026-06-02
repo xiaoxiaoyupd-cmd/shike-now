@@ -1008,3 +1008,527 @@ body {
 .modal-btn {
   width: 100%;
 }
+
+/* ============================================
+   收藏 & 已制作 按钮
+   ============================================ */
+.btn-fav {
+  background: var(--btn-default);
+  color: var(--brown-dark);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.btn-fav.active {
+  background: var(--gold);
+  box-shadow: var(--shadow-md);
+}
+.btn-fav:active { transform: scale(0.94); }
+
+.btn-cooked {
+  background: var(--btn-default);
+  color: var(--brown-dark);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.btn-cooked.done {
+  background: var(--green);
+  box-shadow: var(--shadow-md);
+}
+.btn-cooked:active { transform: scale(0.94); }
+
+/* ============================================
+   Tab 切换栏（收藏页用）
+   ============================================ */
+.tabs-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--btn-default);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--brown-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: var(--orange);
+  box-shadow: var(--shadow-sm);
+}
+.tab-btn:active { transform: scale(0.95); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ============================================
+   卡片上的删除按钮
+   ============================================ */
+.btn-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--stroke);
+  background: var(--white);
+  color: var(--brown-light);
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.btn-remove:active { background: #FFE0E0; color: #E8553D; }
+
+/* ============================================
+   烹饪历史日期
+   ============================================ */
+.history-date {
+  font-size: 0.7rem;
+  color: var(--brown-light);
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* ============================================
+   空状态按钮
+   ============================================ */
+.empty-state .btn {
+  margin-top: 12px;
+}
+
+/* ============================================
+   发布页 — 小红书风格
+   ============================================ */
+.create-cover {
+  width: 100%;
+  height: 200px;
+  border: 2px dashed var(--stroke);
+  border-radius: var(--radius-xl);
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.create-cover:active { transform: scale(0.98); }
+.cover-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--brown-light);
+}
+.cover-camera { font-size: 3rem; }
+.cover-hint { font-size: 0.8rem; font-weight: 700; }
+.cover-preview {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--banner-bg);
+}
+
+/* emoji选择器 */
+.emoji-picker {
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  margin-bottom: 14px;
+}
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.emoji-option {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--cream);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.emoji-option:active { transform: scale(0.9); }
+.emoji-option.selected {
+  background: var(--orange);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 表单 */
+.form-group {
+  margin-bottom: 14px;
+}
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  color: var(--brown-dark);
+  background: var(--card-bg);
+  outline: none;
+  font-weight: 500;
+}
+.form-input::placeholder { color: var(--brown-light); font-weight: 400; }
+.form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  color: var(--brown-dark);
+  background: var(--card-bg);
+  outline: none;
+  resize: none;
+  line-height: 1.6;
+}
+.form-textarea::placeholder { color: var(--brown-light); font-weight: 400; }
+
+/* 标签chips */
+.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  background: var(--btn-default);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brown-dark);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tag-chip:active { transform: scale(0.93); }
+.tag-chip.selected {
+  background: var(--orange);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 关联菜谱行 */
+.recipe-ref-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.recipe-ref-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--brown-dark);
+}
+.recipe-ref-clear {
+  color: var(--brown-light);
+  cursor: pointer;
+  font-weight: 700;
+}
+.recipe-ref-clear:hover { color: var(--red-dot); }
+
+/* 菜谱选择弹窗项 */
+.recipe-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-md);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.recipe-picker-item:active { transform: scale(0.97); }
+.recipe-picker-item.selected { background: var(--orange-light); border-color: var(--orange); }
+
+/* 小号按钮 */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   发现页 — 美食社区
+   ============================================ */
+.discover-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.discover-tabs::-webkit-scrollbar { height: 0; }
+.dtab {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: var(--btn-default);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brown-dark);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.dtab:active { transform: scale(0.93); }
+.dtab.active {
+  background: var(--orange);
+  box-shadow: var(--shadow-sm);
+}
+
+.discover-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 帖子卡片 */
+.post-card {
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.post-card:active { transform: scale(0.98); }
+
+.post-cover {
+  width: 100%;
+  height: 180px;
+  background: var(--banner-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  position: relative;
+}
+.post-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, rgba(255,255,255,0.5));
+  pointer-events: none;
+}
+
+.post-body {
+  padding: 14px 16px 16px;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pa-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--peach);
+  border: 1.5px solid var(--stroke);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+.pa-name {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--brown-dark);
+}
+.pa-time {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--brown-light);
+}
+
+.post-title {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  color: var(--brown-dark);
+  margin-bottom: 6px;
+}
+
+.post-desc {
+  font-size: 0.82rem;
+  color: var(--brown);
+  line-height: 1.5;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.post-recipe-link {
+  display: inline-block;
+  padding: 6px 12px;
+  background: var(--green);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--brown-dark);
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.15s;
+}
+.post-recipe-link:active { transform: scale(0.94); }
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1.5px solid var(--btn-default);
+}
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+  color: var(--brown-dark);
+}
+.action-btn:active { transform: scale(0.9); }
+.action-btn.liked { color: var(--red-dot); }
+.fav-btn-post {
+  font-size: 0.78rem;
+  color: var(--brown);
+}
+
+/* ============================================
+   设置页
+   ============================================ */
+.settings-section {
+  margin-bottom: 16px;
+}
+.settings-section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brown-light);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+.settings-card {
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.setting-row:not(:last-child) {
+  border-bottom: 1.5px solid var(--btn-default);
+}
+.setting-row:active { background: var(--cream); }
+.setting-label {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--brown-dark);
+}
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--brown);
+}
+.mi-arrow { color: var(--brown-light); }
+
+/* Toggle 开关 */
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  display: inline-block;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--btn-default);
+  border: 2px solid var(--stroke);
+  border-radius: 28px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 20px; height: 20px;
+  background: white;
+  border: 2px solid var(--stroke);
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--green);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* 头像选择网格 */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0;
+}

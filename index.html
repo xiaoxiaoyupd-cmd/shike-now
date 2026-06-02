@@ -175,8 +175,9 @@
       <div class="nutrition-item"><div class="nut-value" id="detail-carbs">-</div><div class="nut-label">碳水</div></div>
       <div class="nutrition-item"><div class="nut-value" id="detail-fat">-</div><div class="nut-label">脂肪</div></div>
     </div>
-    <div style="text-align:center;margin:20px 0;">
-      <button class="btn btn-primary" onclick="showToast('已收藏 ⭐')">⭐ 收藏菜谱</button>
+    <div style="text-align:center;margin:20px 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-fav" id="btn-fav" onclick="toggleFavorite(AppState.currentRecipe.id)">☆ 收藏菜谱</button>
+      <button class="btn btn-cooked" id="btn-cooked" onclick="markAsCooked(AppState.currentRecipe.id)">🍽️ 美味已制作完成</button>
     </div>
   </div>
 
@@ -197,10 +198,258 @@
       </div>
     </div>
     <div class="menu-list">
-      <div class="menu-item" onclick="showToast('社区即将上线~ 🚧')"><span class="mi-icon">🌐</span>美食社区<span class="mi-arrow">›</span></div>
-      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">❤️</span>我的收藏<span class="mi-arrow">›</span></div>
-      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">📜</span>烹饪历史<span class="mi-arrow">›</span></div>
-      <div class="menu-item" onclick="showToast('功能开发中~ 🚧')"><span class="mi-icon">⚙️</span>设置<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="navigateTo('discover')"><span class="mi-icon">🌐</span>美食社区<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="navigateTo('favorites')"><span class="mi-icon">❤️</span>我的收藏<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="navigateTo('history')"><span class="mi-icon">📜</span>烹饪历史<span class="mi-arrow">›</span></div>
+      <div class="menu-item" onclick="navigateTo('settings')"><span class="mi-icon">⚙️</span>设置<span class="mi-arrow">›</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       页面6: 收藏页
+       ============================================ -->
+  <div class="page" id="page-favorites">
+    <div class="page-header">
+      <h2>❤️ 我的收藏</h2>
+      <div class="subtitle">收藏的菜谱和帖子都在这里</div>
+    </div>
+    <div class="tabs-row">
+      <div class="tab-btn active" onclick="switchFavTab('recipes', this)">🍳 菜谱收藏</div>
+      <div class="tab-btn" onclick="switchFavTab('posts', this)">📝 帖子收藏</div>
+    </div>
+    <div class="tab-content active" id="fav-recipes-tab"></div>
+    <div class="tab-content" id="fav-posts-tab"></div>
+  </div>
+
+  <!-- ============================================
+       页面7: 烹饪历史
+       ============================================ -->
+  <div class="page" id="page-history">
+    <div class="page-header">
+      <h2>📜 烹饪历史</h2>
+      <div class="subtitle">记录你的每一次美味创作</div>
+    </div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- ============================================
+       页面8: 发布美食（小红书风格）
+       ============================================ -->
+  <div class="page" id="page-create">
+    <div class="page-header">
+      <h2>📸 发布美食</h2>
+      <div class="subtitle">和大家分享你的美味时刻吧~</div>
+    </div>
+    <!-- 封面图区域 -->
+    <div class="create-cover" id="create-cover" onclick="pickCoverEmoji()">
+      <div class="cover-placeholder" id="cover-placeholder">
+        <span class="cover-camera">📸</span>
+        <span class="cover-hint">点击选择封面图</span>
+      </div>
+      <div class="cover-preview" id="cover-preview" style="display:none;">
+        <span id="cover-emoji" style="font-size:5rem;"></span>
+      </div>
+    </div>
+    <!-- emoji选择器 -->
+    <div class="emoji-picker" id="emoji-picker" style="display:none;">
+      <div class="emoji-grid" id="emoji-grid"></div>
+      <button class="btn btn-primary btn-sm" onclick="confirmCoverEmoji()" style="margin-top:8px;width:100%;">确定</button>
+    </div>
+    <!-- 标题 -->
+    <div class="form-group">
+      <label class="form-label">✨ 标题</label>
+      <input type="text" class="form-input" id="post-title" placeholder="给你的美食取个可爱的名字吧~" maxlength="30">
+    </div>
+    <!-- 描述 -->
+    <div class="form-group">
+      <label class="form-label">📝 描述</label>
+      <textarea class="form-textarea" id="post-desc" placeholder="说说这道菜的故事、心得或者小技巧~" rows="3" maxlength="300"></textarea>
+    </div>
+    <!-- 标签选择 -->
+    <div class="form-group">
+      <label class="form-label">🏷️ 标签（点击选择）</label>
+      <div class="tag-chips" id="tag-chips"></div>
+    </div>
+    <!-- 关联菜谱（可选） -->
+    <div class="form-group">
+      <label class="form-label">🍳 关联菜谱（可选）</label>
+      <div class="recipe-ref-row" id="recipe-ref-row">
+        <button class="btn btn-sm" onclick="showRecipePicker()" style="font-size:0.8rem;">选择菜谱 📖</button>
+        <span class="recipe-ref-name" id="recipe-ref-name" style="display:none;"></span>
+        <span class="recipe-ref-clear" id="recipe-ref-clear" style="display:none;" onclick="clearRecipeRef()">✕</span>
+      </div>
+    </div>
+    <!-- 发布按钮 -->
+    <div style="text-align:center;margin:20px 0;">
+      <button class="btn-generate" onclick="publishPost()">🐱 发布到社区</button>
+    </div>
+  </div>
+
+  <!-- ============================================
+       页面9: 发现页（美食社区）
+       ============================================ -->
+  <div class="page" id="page-discover">
+    <div class="page-header">
+      <h2>🧭 美食社区</h2>
+      <div class="subtitle">看看大家都在做什么好吃的~</div>
+    </div>
+    <!-- 分类Tab -->
+    <div class="discover-tabs" id="discover-tabs">
+      <span class="dtab active" onclick="filterDiscover('all', this)">全部</span>
+      <span class="dtab" onclick="filterDiscover('🥗减脂', this)">🥗减脂</span>
+      <span class="dtab" onclick="filterDiscover('🍱便当', this)">🍱便当</span>
+      <span class="dtab" onclick="filterDiscover('🍰甜品', this)">🍰甜品</span>
+      <span class="dtab" onclick="filterDiscover('🍜面食', this)">🍜面食</span>
+      <span class="dtab" onclick="filterDiscover('🥘家常', this)">🥘家常</span>
+    </div>
+    <!-- 帖子Feed -->
+    <div class="discover-feed" id="discover-feed"></div>
+  </div>
+
+  <!-- ============================================
+       页面10: 设置页
+       ============================================ -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <h2>⚙️ 设置</h2>
+    </div>
+    <!-- 用户信息编辑 -->
+    <div class="settings-section">
+      <div class="settings-section-title">👤 个人信息</div>
+      <div class="settings-card">
+        <div class="setting-row" onclick="showAvatarPicker()">
+          <span class="setting-label">头像</span>
+          <span class="setting-value"><span id="setting-avatar">🎓</span> <span class="mi-arrow">›</span></span>
+        </div>
+        <div class="setting-row" onclick="editNickname()">
+          <span class="setting-label">昵称</span>
+          <span class="setting-value"><span id="setting-nickname">干饭大学生</span> <span class="mi-arrow">›</span></span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">身份</span>
+          <span class="setting-value"><span id="setting-identity">大学生</span></span>
+        </div>
+      </div>
+    </div>
+    <!-- 身份切换 -->
+    <div class="settings-section">
+      <div class="settings-section-title">🔄 切换身份</div>
+      <div class="identity-cards" style="margin-top:0;">
+        <div class="identity-card" id="set-college" onclick="switchIdentity('college')">
+          <div class="id-icon">🎓</div>
+          <div class="id-info">
+            <div class="id-name">大学生</div>
+            <div class="id-desc">宿舍小灶 · 便宜快手</div>
+          </div>
+        </div>
+        <div class="identity-card" id="set-solo" onclick="switchIdentity('solo')">
+          <div class="id-icon">🏠</div>
+          <div class="id-info">
+            <div class="id-name">独居青年</div>
+            <div class="id-desc">一人食量 · 拒绝浪费</div>
+          </div>
+        </div>
+        <div class="identity-card" id="set-fitness" onclick="switchIdentity('fitness')">
+          <div class="id-icon">💪</div>
+          <div class="id-info">
+            <div class="id-name">健身减脂</div>
+            <div class="id-desc">高蛋白低卡 · 好吃不胖</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 通用设置 -->
+    <div class="settings-section">
+      <div class="settings-section-title">🔔 通用</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <span class="setting-label">推送通知</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-notif" checked onchange="toggleSetting('notif')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">声音效果</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-sound" checked onchange="toggleSetting('sound')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <!-- 数据管理 -->
+    <div class="settings-section">
+      <div class="settings-section-title">💾 数据管理</div>
+      <div class="settings-card">
+        <div class="setting-row" onclick="clearAllData()">
+          <span class="setting-label">清除缓存数据</span>
+          <span class="setting-value"><span style="color:var(--brown-light);font-size:0.75rem;">收藏/历史/帖子</span> <span class="mi-arrow">›</span></span>
+        </div>
+      </div>
+    </div>
+    <!-- 关于 -->
+    <div class="settings-section">
+      <div class="settings-section-title">ℹ️ 关于</div>
+      <div class="settings-card">
+        <div class="setting-row">
+          <span class="setting-label">版本</span>
+          <span class="setting-value">v1.2.0</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">食刻NOW</span>
+          <span class="setting-value" style="font-size:0.72rem;color:var(--brown-light);">用家里的食材，做今天的饭 ✨</span>
+        </div>
+      </div>
+    </div>
+    <!-- 退出登录 -->
+    <div style="text-align:center;margin:20px 0;">
+      <button class="btn" style="background:#FFE0E0;color:#C0392B;border-color:#E0C0C0;" onclick="logout()">
+        🚪 退出登录
+      </button>
+    </div>
+  </div>
+
+  <!-- 头像选择弹窗 -->
+  <div class="modal-overlay" id="avatar-picker-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-decor">🎨</span>
+        <span class="modal-title">选择头像</span>
+        <span class="modal-decor">🎨</span>
+      </div>
+      <div class="avatar-grid" id="avatar-grid"></div>
+      <button class="btn btn-primary btn-lg modal-btn" onclick="closeAvatarPicker()">完成</button>
+    </div>
+  </div>
+
+  <!-- 昵称编辑弹窗 -->
+  <div class="modal-overlay" id="nickname-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-decor">✏️</span>
+        <span class="modal-title">修改昵称</span>
+        <span class="modal-decor">✏️</span>
+      </div>
+      <input type="text" class="form-input" id="nickname-input" placeholder="输入新昵称~" maxlength="12" style="margin:10px 0;">
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary btn-lg" onclick="confirmNickname()" style="flex:1;">确定</button>
+        <button class="btn btn-lg" onclick="closeNicknameModal()" style="flex:1;">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 菜谱选择弹窗 -->
+  <div class="modal-overlay" id="recipe-picker-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-decor">📖</span>
+        <span class="modal-title">选择关联菜谱</span>
+        <span class="modal-decor">📖</span>
+      </div>
+      <div class="modal-subtitle">点击菜谱关联到你的帖子</div>
+      <div id="recipe-picker-list" style="max-height:280px;overflow-y:auto;"></div>
+      <button class="btn btn-primary btn-lg modal-btn" onclick="closeRecipePicker()">取消</button>
     </div>
   </div>
 
@@ -215,7 +464,7 @@
       <span class="nav-icon">🧭</span><span>发现</span>
     </button>
     <div class="nav-center" data-page="create">
-      <div class="nav-paw" onclick="navigateTo('home');showToast('发布美食~ 📸')">🐾</div>
+      <div class="nav-paw" onclick="navigateTo('create');resetCreatePage()">🐾</div>
       <div class="nav-label">发布</div>
     </div>
     <button class="nav-item" data-page="favorites">
